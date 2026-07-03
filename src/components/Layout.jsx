@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { Layout as AntLayout, Menu, Dropdown, Avatar, Switch, Space, Typography } from 'antd'
+import { Layout as AntLayout, Menu, Switch, Typography } from 'antd'
 import {
   DashboardOutlined, TeamOutlined, SafetyCertificateOutlined,
-  BarChartOutlined, UserOutlined, LogoutOutlined, MoonOutlined, SunOutlined,
+  BarChartOutlined, MoonOutlined, SunOutlined,
 } from '@ant-design/icons'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 
 const { Header, Sider, Content } = AntLayout
 
@@ -21,15 +20,6 @@ export default function Layout() {
   const [dark, setDark] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const { profile, signOut } = useAuth()
-
-  const userMenu = {
-    items: [
-      { key: 'role', label: `Role: ${profile?.role || 'sales'}`, disabled: true },
-      { type: 'divider' },
-      { key: 'signout', icon: <LogoutOutlined />, label: 'Sign out', onClick: () => signOut().then(() => navigate('/login')) },
-    ],
-  }
 
   return (
     <AntLayout style={{ minHeight: '100vh' }} className={dark ? 'dark' : ''}>
@@ -46,15 +36,7 @@ export default function Layout() {
       <AntLayout>
         <Header style={{ background: '#fff', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Typography.Text strong>Sales &amp; License Operations</Typography.Text>
-          <Space size="large">
-            <Switch checkedChildren={<MoonOutlined />} unCheckedChildren={<SunOutlined />} checked={dark} onChange={setDark} />
-            <Dropdown menu={userMenu} placement="bottomRight">
-              <Space style={{ cursor: 'pointer' }}>
-                <Avatar icon={<UserOutlined />} />
-                <span>{profile?.full_name || profile?.email}</span>
-              </Space>
-            </Dropdown>
-          </Space>
+          <Switch checkedChildren={<MoonOutlined />} unCheckedChildren={<SunOutlined />} checked={dark} onChange={setDark} />
         </Header>
         <Content style={{ margin: 20 }}>
           <Outlet />
